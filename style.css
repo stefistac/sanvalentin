@@ -251,26 +251,34 @@ fondo-estrellado {
 #texto-escritura {
     font-family: 'Playfair Display', serif;
     font-style: italic;
-    font-weight: 600; /* Un poco más gruesa para que sea fácil de leer */
-    font-size: 2.2rem;
-    color: #b93232; /* Un café espresso con un toque de vino (súper legible) */
-    text-align: center;
-    line-height: 1.7; /* Más espacio entre líneas para que no se amontone */
-    max-width: 85%;
-    margin: 0 auto;
+    font-weight: 600;
     
-    /* LA SOMBRA DE PROFUNDIDAD */
-    text-shadow: 
-        /* 1. Un brillo sutil arriba a la izquierda para el efecto relieve */
-        1px 1px 0px rgba(255, 255, 255, 0.7), 
-        /* 2. La sombra principal que da la "distancia" del fondo */
-        3px 3px 6px rgba(0, 0, 0, 0.15),
-        /* 3. Un suave aura para que las líneas finas de la letra no se pierdan */
-        0px 0px 10px rgba(74, 44, 44, 0.1);
-
-    /* Suavizado de fuente para que se vea más profesional */
+    /* EXPLICACIÓN DEL TAMAÑO:
+       1rem es el tamaño estándar (pequeño y elegante en celu)
+       2.5vw es el crecimiento suave
+       1.8rem es el tope para que en PC no sea gigante
+    */
+    font-size: clamp(1rem, 2.5vw, 2.8rem); 
+    
+    color: #b93232;
+    text-align: center;
+    
+    /* Un line-height de 1.4 hace que el texto respire sin ocupar toda la pantalla */
+    line-height: 1.4; 
+    
+    /* Esto es CLAVE: En celu limitamos el ancho para que no toque los bordes */
+    width: 90%;
+    max-width: 800px; /* En PC se mantiene centrado y legible */
+    
+    margin: 0 auto;
+    padding: 0 15px;
+    
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.7), 2px 2px 4px rgba(0, 0, 0, 0.1);
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    
+    /* Para que respete los saltos de línea que pusiste en el JS */
+    white-space: normal; 
+    word-wrap: break-word;
 }
 @media (max-width: 600px) {
     #texto-escritura {
@@ -352,14 +360,13 @@ fondo-estrellado {
 
 /* Si quieres que el de arriba sea un poco más grande que el de abajo: */
 .texto-sticker.arriba {
-    font-size: 2.8rem; /* Un poco más imponente para el saludo */
-   
+    /* En celu: ~1.6rem | En PC: 2.8rem */
+    font-size: clamp(1.6rem, 5vw, 2.8rem); 
 }
 
 .texto-sticker.abajo {
-    font-size: 2.5rem; /* Un poco más sutil y romántico para la frase final */
-    letter-spacing: 1px; /* Un poco de aire entre letras */
-    
+    /* En celu: ~1.4rem | En PC: 2.5rem */
+    font-size: clamp(1.4rem, 4vw, 2.5rem);
 }
 
 /* Esta clase es la que los hará aparecer */
@@ -368,12 +375,10 @@ fondo-estrellado {
 }
 
 #foto-grande {
-    width: 450px;
+    width: 90vw;      /* En celu ocupa casi todo el ancho */
+    max-width: 450px; /* En PC se planta en 450px y de ahí no sube */
     height: auto;
-    filter: drop-shadow(0 0 3px white) 
-            drop-shadow(0 0 15px rgba(255, 255, 255, 0.6))
-            drop-shadow(15px 25px 35px rgba(0, 0, 0, 0.3));
-    /* Animación de entrada que ya teníamos */
+    filter: drop-shadow(0 0 3px white) drop-shadow(0 0 15px rgba(255, 255, 255, 0.6));
     transform: scale(0);
     transition: transform 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
