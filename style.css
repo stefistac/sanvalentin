@@ -1,0 +1,462 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: radial-gradient(circle, #fff0f5 20%, #f8bbd0 100%);
+    margin: 0;
+    overflow: hidden;
+    padding-left: 0;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+.flower {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    animation:
+        pulse 2s infinite ease-in-out,
+        aparecerFlor 5s ease-out forwards;
+}
+@keyframes pulse {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(5deg); }
+}
+.petal {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background-color: #a864df;
+    border-radius: 50% 50% 0 50%;
+    opacity: 0.9;
+    box-shadow: 0 0 20px rgba(166, 77, 255, 0.3);
+
+    top: 50%;
+    left: 50%;
+    /* Ponemos el punto de rotación en la esquina inferior izquierda */
+    transform-origin: bottom left;
+
+    /* ESTO CIERRA EL HUECO:
+       Al rotar sobre 'bottom left', necesitamos que ese punto sea el centro.
+       Como el pétalo mide 80px, lo subimos para que la base sea el eje central. */
+    margin-top: -80px;
+    opacity: 0; /* Empiezan invisibles */
+    animation: aparecerFlor 1.5s ease-out forwards;
+}
+.p1 { transform: rotate(0deg); animation-delay: 0.1s; }
+.p2 { transform: rotate(51deg); animation-delay: 0.4s; }
+.p3 { transform: rotate(102deg); animation-delay: 0.7s; }
+.p4 { transform: rotate(153deg); animation-delay: 1.0s; }
+.p5 { transform: rotate(204deg); animation-delay: 1.3s; }
+.p6 { transform: rotate(255deg); animation-delay: 1.6s; }
+.p7 { transform: rotate(306deg); animation-delay: 1.9s; }
+
+.center {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    background-color: #81bb90;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    /* El translate es obligatorio para que el círculo no se mueva de su sitio */
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    background: radial-gradient(circle, #a2d9b1 0%, #81bb90 100%);
+    box-shadow:
+        0 0 10px rgba(0,0,0,0.3), /* Sombra externa */
+        inset 0 0 5px rgba(0,0,0,0.2); /* Sombra interna para volumen */
+        opacity: 0;
+    animation: aparecerFlor 1s ease-out 2.2s forwards;
+}
+
+/* EL MENSAJE */
+.message {
+    color: #735094;
+    font-family: 'Great Vibes', cursive;
+    font-size: 4rem;
+    animation: fadeIn 4s ease-in;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.p-drop {
+    position: fixed;
+    top: -10%;
+    font-size: 24px;
+    animation: fall linear infinite;
+}
+@keyframes fall {
+    0% { top: -10%; transform: translateX(0) rotate(0deg); }
+    100% { top: 110%; transform: translateX(100px) rotate(360deg); }
+}
+.p-drop:nth-child(1) { left: 10%; animation-duration: 5s; }
+.p-drop:nth-child(2) { left: 30%; animation-duration: 7s; animation-delay: 1s; }
+.p-drop:nth-child(3) { left: 50%; animation-duration: 6s; animation-delay: 2s; }
+.p-drop:nth-child(4) { left: 70%; animation-duration: 8s; animation-delay: 0.5s; }
+.p-drop:nth-child(5) { left: 85%; animation-duration: 5.5s; animation-delay: 3s; }
+.p-drop:nth-child(6) { left: 20%; animation-duration: 9s; animation-delay: 4s; }
+@keyframes aparecerFlor {
+    from {
+        opacity: 0;
+        scale: 0.5;
+    }
+    to {
+        opacity: 0.9; /* O la opacidad que prefieras */
+        scale: 1;
+    }
+}
+.btn-entrada {
+    position: relative; /* Cambiamos de fixed a relative */
+    margin-top: 50px;   /* Espacio entre la flor y el botón */
+    right: auto;        /* Quitamos el ajuste de la derecha */
+    top: auto;          /* Quitamos el ajuste de arriba */
+    transform: none;    /* Quitamos el desplazamiento previo */
+
+    padding: 15px 30px;
+    background-color: #81bb90;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0;
+    animation: aparecerFlor 1.5s ease-out 3.5s forwards; /* Aparece después de la flor */
+    box-shadow: 0 4px 15px rgba(129, 187, 144, 0.4);
+    transition: 0.3s;
+}
+.btn-entrada:hover {
+    transform: scale(1.1);
+    background-color: #a864df;
+    color: #555;
+}
+
+
+/* El mensaje que se mostrará al final */
+.mensaje-oculto {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 85%;
+    z-index: 100;
+    opacity: 0; 
+    /* Esta es la clave: 1.5 segundos de suavidad */
+    transition: opacity 1.5s ease !important; 
+}
+
+.mostrar { 
+    opacity: 1 !important; 
+}
+
+.ocultar { 
+    opacity: 0 !important; 
+}
+/* Esta clase la usaremos para mostrarlo desde JS */
+.mensaje-visible {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.mensaje-oculto h1 {
+    color: white;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.5rem;
+    line-height: 1.6;
+    
+}
+
+/* #texto-escritura { */
+
+    /* white-space: pre-wrap;
+    overflow: hidden;
+    padding-right: 5px;
+
+    /* Nueva fuente y estilo */
+    /* font-family: 'Dancing Script', cursive;
+    color: #17ac30;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 1.6; */
+/* } */
+
+@keyframes parpadeoCursor {
+    0%, 100% { border-color: transparent; }
+    50% { border-color: #D8BFD8; }
+}
+fondo-estrellado {
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%) !important;
+    transition: background 2s ease;
+}
+
+/* Creamos las estrellas usando un truco de box-shadow */
+.fondo-estrellado::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    /* Tamaño de la estrella */
+    width: 3px; 
+    height: 3px;
+    background: transparent;
+    
+    /* Posiciones aleatorias por toda la pantalla */
+    /* Usamos blanco (#FFF) para que brillen sobre el fondo rosa */
+    box-shadow:
+        10vw 20vh #FFF, 25vw 10vh #FFF, 40vw 35vh #FFF,
+        60vw 15vh #FFF, 80vw 25vh #FFF, 95vw 10vh #FFF,
+        15vw 50vh #FFF, 35vw 70vh #FFF, 55vw 55vh #FFF,
+        75vw 80vh #FFF, 90vw 60vh #FFF, 20vw 90vh #FFF,
+        50vw 10vh #FFF, 70vw 40vh #FFF, 85vw 85vh #FFF;
+
+    border-radius: 50%;
+    opacity: 0.6;
+    
+    /* Animación de parpadeo suave sin movimiento */
+    animation: centelleo 4s infinite ease-in-out;
+    
+    /* Para que se vean un poco más "mágicas" */
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
+}
+
+/* La animación de parpadeo (solo opacidad) */
+@keyframes centelleo {
+    0%, 100% { 
+        opacity: 0.2; 
+    }
+    50% { 
+        opacity: 0.8; 
+    }
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 2s ease; /* Tarda 2 segundos en desaparecer */
+    pointer-events: none; /* Evita que se pueda clickear mientras desaparece */
+}
+
+#texto-escritura {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 600; /* Un poco más gruesa para que sea fácil de leer */
+    font-size: 2.2rem;
+    color: #b93232; /* Un café espresso con un toque de vino (súper legible) */
+    text-align: center;
+    line-height: 1.7; /* Más espacio entre líneas para que no se amontone */
+    max-width: 85%;
+    margin: 0 auto;
+    
+    /* LA SOMBRA DE PROFUNDIDAD */
+    text-shadow: 
+        /* 1. Un brillo sutil arriba a la izquierda para el efecto relieve */
+        1px 1px 0px rgba(255, 255, 255, 0.7), 
+        /* 2. La sombra principal que da la "distancia" del fondo */
+        3px 3px 6px rgba(0, 0, 0, 0.15),
+        /* 3. Un suave aura para que las líneas finas de la letra no se pierdan */
+        0px 0px 10px rgba(74, 44, 44, 0.1);
+
+    /* Suavizado de fuente para que se vea más profesional */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+@media (max-width: 600px) {
+    #texto-escritura {
+        font-size: 1.8rem; /* Tamaño mediano para que quepa en el teléfono */
+    }
+}
+/* Fotos pequeñas en forma de corazón */
+.foto-corazon {
+    position: fixed;
+    bottom: -200px;
+    width: 150px;  /* Bajamos de 180 a 150 */
+    height: 150px; /* Bajamos de 180 a 150 */
+    object-fit: cover;
+    clip-path: path('M90 36 C36 -18, 0 36, 90 126 C180 36, 144 -18, 90 36');
+    
+    /* TRANSPARENCIA: Aquí está el truco */
+    opacity: 0.35; /* Mantén la transparencia bajita que acordamos para que no sature */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    
+    /* Quitamos un poco el brillo fuerte y ponemos uno más suave */
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+    
+    z-index: 10;
+    animation: subirCorazon 10s ease-out forwards, 
+               balanceoInfinito 4s ease-in-out infinite alternate;
+}
+.foto-corazon:hover {
+    opacity: 0.8;
+    transform: scale(1.1); 
+    z-index: 100;
+}
+@keyframes subirCorazon {
+    0% { bottom: -200px; }
+    100% { bottom: var(--final-y); } /* La altura será aleatoria desde JS */
+}
+
+@keyframes balanceoInfinito {
+    from { transform: translateX(-10px) rotate(-5deg); }
+    to { transform: translateX(10px) rotate(5deg); }
+}
+
+
+/* Foto Final Grande */
+#foto-final-container {
+    display: none; /* Se activa con el JS */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Esto lo centra */
+    z-index: 500;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    /* AQUÍ ESTÁ EL TRUCO: */
+    animation: flotar 3s ease-in-out infinite; 
+}
+
+/* Esta clase es la que activas con JavaScript */
+.mostrar-final {
+    display: flex !important; /* ¡OBLIGATORIO para que aparezca! */
+}
+/* Estilo para los textos del sticker */
+.texto-sticker {
+    opacity: 0;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 700;
+    color: #9e3a3a;
+    transition: opacity 2s ease-in-out;
+    margin: 15px 0; /* Espacio entre el texto y la foto */
+    
+    /* AJUSTE DE TAMAÑO */
+    font-size: 2.2rem; /* Tamaño general */
+    text-align: center;
+    line-height: 1.2;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+/* Si quieres que el de arriba sea un poco más grande que el de abajo: */
+.texto-sticker.arriba {
+    font-size: 2.8rem; /* Un poco más imponente para el saludo */
+   
+}
+
+.texto-sticker.abajo {
+    font-size: 2.5rem; /* Un poco más sutil y romántico para la frase final */
+    letter-spacing: 1px; /* Un poco de aire entre letras */
+    
+}
+
+/* Esta clase es la que los hará aparecer */
+.revelar-texto {
+    opacity: 1 !important;
+}
+
+#foto-grande {
+    width: 450px;
+    height: auto;
+    filter: drop-shadow(0 0 3px white) 
+            drop-shadow(0 0 15px rgba(255, 255, 255, 0.6))
+            drop-shadow(15px 25px 35px rgba(0, 0, 0, 0.3));
+    /* Animación de entrada que ya teníamos */
+    transform: scale(0);
+    transition: transform 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+/* Keyframes para el efecto flotante */
+@keyframes flotar {
+    0% {
+        transform: translate(-50%, -50%); /* Posición original */
+    }
+    50% {
+        transform: translate(-50%, -53%); /* Sube un poquito (el número es menor para subir) */
+    }
+    100% {
+        transform: translate(-50%, -50%); /* Vuelve al centro */
+    }
+}
+/* Ajuste para que los textos también crezcan con la foto */
+.mostrar-foto-grande {
+    transform: scale(1) !important;
+}
+letra-suave {
+    opacity: 0;
+    display: inline-block;
+    animation: aparecerLetra 0.6s forwards; /* 0.6 segundos de entrada suave */
+    text-shadow: 0 0 10px rgba(216, 191, 216, 0.8);
+}
+
+@keyframes aparecerLetra {
+    from { 
+        opacity: 0; 
+        filter: blur(3px); /* Un pequeño desenfoque al inicio */
+        transform: translateY(2px); /* Sube un poquito al aparecer */
+    }
+    to { 
+        opacity: 1; 
+        filter: blur(0); 
+        transform: translateY(0);
+    }
+}
+
+#btn-reinicio {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    /* Un fondo más cálido y translúcido que combina con la viñeta */
+    background: rgba(255, 255, 255, 0.2); 
+    border: 1.5px solid rgba(74, 44, 44, 0.4); /* El color café de tu texto */
+    border-radius: 50%;
+    color: #4a2c2c; /* Mismo color de las letras */
+    font-size: 24px; /* Un pelín más pequeño para que sea más elegante */
+    cursor: pointer;
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Animación más "pro" */
+    backdrop-filter: blur(8px); /* Más desenfoque para efecto vidrio */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+#btn-reinicio:hover {
+    /* Al pasar el mouse, se vuelve sólido con el color del texto */
+    background: #4a2c2c;
+    color: #fff0f5; /* El rosa clarito del fondo */
+    transform: rotate(180deg) scale(1.1); 
+    border-color: #4a2c2c;
+    box-shadow: 0 8px 25px rgba(74, 44, 44, 0.3);
+}
+
+/* Clase para mostrar el botón con suavidad */
+.mostrar-btn {
+    display: flex !important;
+    animation: aparecerBtn 0.8s forwards;
+}
+
+@keyframes aparecerBtn {
+    from { 
+        opacity: 0; 
+        transform: scale(0.5) translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: scale(1) translateY(0); 
+    }
+}

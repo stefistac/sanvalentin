@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    <link rel="icon" href="mifoto.jpg" type="image/x-icon">
+    <title>Para Mamur</title>
+</head>
+<body>
+    
+    <div class="falling-petals">
+        <span class="p-drop">🌸</span>
+        <span class="p-drop">❤️</span>
+        <span class="p-drop">🩷</span>
+        <span class="p-drop">❤️</span>
+        <span class="p-drop">🌸</span>
+        <span class="p-drop">❤️</span>
+        <span class="p-drop">🩷</span>
+        <span class="p-drop">🌸</span>
+        <span class="p-drop">❤️</span>
+        <span class="p-drop">🩷</span>
+        <span class="p-drop">🌸</span>
+    </div>
+
+    <div class="container">
+    <div class="flower">
+        <div class="petal p1"></div>
+        <div class="petal p2"></div>
+        <div class="petal p3"></div>
+        <div class="petal p4"></div>
+        <div class="petal p5"></div>
+        <div class="petal p6"></div>
+        <div class="petal p7"></div>
+        <div class="center"></div>
+    </div>
+
+    <button id="btn-entrada" class="btn-entrada">Entra aquí</button>
+</div>
+<audio id="mi-cancion">
+    <source src="ilove.mp3" type="audio/mpeg">
+    Tu navegador no soporta el elemento de audio.
+</audio>
+<div id="mensaje-final" class="mensaje-oculto">
+    <h1 id="texto-escritura"></h1>
+</div>
+<div id="contenedor-fotos-pequenas"></div>
+
+<div id="foto-final-container">
+    <h2 class="texto-sticker arriba">¡Feliz Día Mamur!</h2>
+    <img id="foto-grande" src="collage.png" alt="Nuestro Collage">
+    <h2 class="texto-sticker abajo">Te amo tres galaxias💘</h2>
+</div>
+    <script>
+document.getElementById('btn-entrada').addEventListener('click', function() {
+    const musica = document.getElementById('mi-cancion');
+    const container = document.querySelector('.container');
+    const mensajeFinal = document.getElementById('mensaje-final');
+    const elementoDestino = document.getElementById('texto-escritura');
+    
+    // Reproducir música
+    if (musica) musica.play();
+    
+    // Desvanecer flor y botón inicial
+    container.classList.add('fade-out');
+    this.classList.add('fade-out');
+
+    setTimeout(() => {
+        container.style.display = 'none';
+        this.style.display = 'none';
+        
+        // Activar estrellas y mostrar contenedor de mensaje
+        document.body.classList.add('fondo-estrellado'); 
+        mensajeFinal.style.display = 'block'; // Lo ponemos en el mapa
+        
+        // Pequeño delay para que la opacidad funcione
+        setTimeout(() => {
+            mensajeFinal.classList.add('mostrar'); 
+        }, 100);
+
+        soltarFotosPequenas();
+        empezarLetra();
+    }, 2000);
+
+    const textoParaEscribir = "A veces me cuesta recordar cómo eran aquellos días sin que estuvieras, por el simple hecho de que ahora contigo todo es más bonito. \n\ Haces que los momentos se vuelvan un hermoso recuerdo.\n\ Aprecio cada detalle que tenés conmigo, del mismo modo que admiro cada detalle que existe en vos… \n\ especialmente esos lunares que nos hacen ser uno. ";
+    let i = 0;
+
+    function empezarLetra() {
+    if (i < textoParaEscribir.length) {
+        let letra = textoParaEscribir.charAt(i);
+        
+        // Si es un salto de línea, ponemos el <br>, si no, envolvemos la letra
+        if (letra === "\n") {
+            elementoDestino.innerHTML += "<br>";
+        } else {
+            // Aquí le ponemos la clase 'letra-suave' para que fluya
+            elementoDestino.innerHTML += `<span class="letra-suave">${letra}</span>`;
+        }
+        
+        i++;
+
+        // Ajustamos la velocidad (80ms es un buen ritmo)
+        let velocidad = 80; 
+        
+        // // Si hay una coma o punto, esperamos un poco más para que se sienta real
+        // if (letra === "," || letra === ".") {
+        //     velocidad = 450;
+        // }
+
+        setTimeout(empezarLetra, velocidad);
+    } else {
+        // Cuando termina todo el mensaje, esperamos 5 segundos y mostramos la foto
+        setTimeout(revelarFotoFinal, 5000);
+    }
+}
+
+    function soltarFotosPequenas() {
+    const fotos = ['foto1.jpg', 'foto2.jpg', 'foto3.jpg', 'foto4.jpg', 'foto5.jpg']; 
+    const contenedor = document.getElementById('contenedor-fotos-pequenas');
+    
+    // Definimos "zonas" horizontales para que no se amontonen
+    // Foto 1: Izquierda, Foto 2: Centro-Izquierda, Foto 3: Centro, etc.
+    const posicionesX = ['5%', '25%', '45%', '65%', '85%'];
+    // Alturas variadas para que no parezcan una línea recta
+    const posicionesY = ['65%', '20%', '50%', '15%', '70%'];
+
+    fotos.forEach((src, index) => {
+        setTimeout(() => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.className = 'foto-corazon';
+            
+            // Asignamos la posición basada en el orden de la foto
+            // Si tienes más de 5 fotos, el "%" vuelve a empezar para no dar error
+            img.style.left = posicionesX[index % posicionesX.length];
+            img.style.setProperty('--final-y', posicionesY[index % posicionesY.length]);
+
+            contenedor.appendChild(img);
+        }, index * 1000);
+    });
+}
+function revelarFotoFinal() {
+    // 1. TRANSICIÓN DE SALIDA: El texto de la carta se desvanece
+    mensajeFinal.classList.remove('mostrar');
+    mensajeFinal.classList.add('ocultar');
+    
+    // 2. Desvanecemos también las fotos pequeñas
+    const fotosPeque = document.getElementById('contenedor-fotos-pequenas');
+    if(fotosPeque) fotosPeque.classList.add('fade-out');
+
+    // 3. Esperamos a que el texto desaparezca para mostrar el sticker
+    setTimeout(() => {
+        mensajeFinal.style.display = 'none';
+        
+        const containerFoto = document.getElementById('foto-final-container');
+        const fotoGrande = document.getElementById('foto-grande');
+        
+        if(containerFoto) {
+            containerFoto.style.display = 'flex'; 
+            
+            setTimeout(() => {
+                // --- PASO 1: Aparece el sticker (crece) ---
+                if(fotoGrande) {
+                    fotoGrande.classList.add('mostrar-foto-grande');
+                }
+                
+                // --- PASO 2: Aparece texto de ARRIBA (lento, a los 1.5s) ---
+                setTimeout(() => {
+                    const textoArriba = document.querySelector('.texto-sticker.arriba');
+                    if(textoArriba) textoArriba.classList.add('revelar-texto');
+                }, 1500); 
+
+                // --- PASO 3: Aparece texto de ABAJO (lento, a los 3.5s) ---
+                setTimeout(() => {
+                    const textoAbajo = document.querySelector('.texto-sticker.abajo');
+                    if(textoAbajo) textoAbajo.classList.add('revelar-texto');
+                }, 3500); 
+                
+                // --- PASO 4: Aparece el BOTÓN DE REINICIO (a los 5.5s) ---
+                setTimeout(() => {
+                    const btn = document.getElementById('btn-reinicio');
+                    if(btn) btn.classList.add('mostrar-btn');
+                }, 5500); 
+
+            }, 100);
+        }
+    }, 1500); 
+}
+}); // <--- Mantén este cierre para que no se rompa el primer botón
+</script>
+<button id="btn-reinicio" onclick="location.reload()">
+    &#x21BB; </button>
+</body>
+</html>
